@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://fonts.cdnfonts.com/css/menlo" rel="stylesheet">
   <meta charset="UTF-8">
-  <title>macOS Terminal Fullscreen</title>
+  <title>TermoGame</title>
   <style>
+    *{
+      font-family: 'Menlo', monospace;
+    }
     html, body {
       margin: 0;
       padding: 0;
@@ -96,8 +100,11 @@
       <div class="title">TermoGame</div>
     </div>
     <div class="terminal" id="terminal">
-Welcome to the macOS-style Terminal.
-Type 'help' to get started.
+Welcome To TermoGame! Run the following commands to start:
+Enter the command 'hey' to view other commands.
+
+1) hey (To see the available commands)
+
     </div>
     <div class="input-line">$ <span id="typed"></span><span class="cursor"></span></div>
     <input type="text" id="hiddenInput" autofocus>
@@ -122,10 +129,10 @@ Type 'help' to get started.
     };
 
     function startGame() {
-      gameMode = true;
-      gameStep = 1;
-      terminal.innerHTML += "\n🎮 Starting Terminal Tour...\n";
-      terminal.innerHTML += "Q1: Who made this terminal?\n(a) Elon Musk\n(b) You\n(c) ChatGPT\n";
+      terminal.innerHTML += "\n";
+      terminal.innerHTML += "1) guide  (For a quick guide)\n2) req (Requirements to participate)\n3) projects (To see the example projects)\n4) reward (To see the reward)\n5) faqs (Frequently Asked Questions)\n6) club-meet (To run a club meeting)\n7) Submit (Submit your project)\n8) help";
+      
+      
     }
 
     function processGame(inputValue) {
@@ -140,7 +147,7 @@ Type 'help' to get started.
       }
     }
 
-    function alertUser() {
+    function hey(on) {
       alert("You clicked the close button!");
     }
 
@@ -155,7 +162,7 @@ Type 'help' to get started.
 
         if (gameMode) {
           processGame(value);
-        } else if (value === 'play') {
+        } else if (value === 'hey') {
           startGame();
         } else if (value === 'clear') {
           terminal.innerHTML = '';
