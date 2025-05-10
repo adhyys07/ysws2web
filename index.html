@@ -51,14 +51,14 @@
     .minimize { background-color: #ffbd2e;
       margin-left: -1460px;
     }
-    .maximize { background-color: #27c93f;
+    .maximize { background-color: #33ff33;
       position: relative;
       right: 1460px;}
 
     .terminal {
       flex: 1;
       overflow-y: auto;
-      color: #33ff33;
+      color: white;
       padding: 10px;
       white-space: pre-wrap;
     }
@@ -66,13 +66,13 @@
     .input-line {
       padding: 10px;
       background-color: #000;
-      color: #33ff33;
+      color: white;
     }
 
     .cursor {
       display: inline-block;
       width: 10px;
-      background: #33ff33;
+      background: white;
       animation: blink 1s step-start 0s infinite;
     }
 
@@ -93,7 +93,7 @@
       <div class="circle close" onclick="openYouTube()"></div>
       <div class="circle minimize"></div>
       <div class="circle maximize"></div>
-      <div class="title">Terminal - macOS</div>
+      <div class="title"></div>
     </div>
     <div class="terminal" id="terminal">
 Welcome to the macOS-style Terminal.
@@ -138,6 +138,10 @@ Type 'help' to get started.
         terminal.innerHTML += "🎉 Tour complete. Type 'help' for more.\n";
         gameMode = false;
       }
+    }
+
+    function alertUser() {
+      alert("You clicked the close button!");
     }
 
     input.addEventListener('input', () => {
