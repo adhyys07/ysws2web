@@ -11,16 +11,16 @@
     html, body {
       margin: 0;
       padding: 0;
+      height: 100vh;
+      overflow: hidden;
       background-color: #1e1e1e;
-      height: 100%;
-      font-family: 'Courier New', monospace;
-      padding: 1em;
-      font-family: Noto Sans Display;
       color: #eee;
       font-size: 1em;
       line-height: 1;
+      font-family: 'Menlo', monospace;
       text-shadow: 0.06rem 0 0.06rem #ea36af, -0.125rem 0 0.06rem #75fa69;
       letter-spacing: 0.125em;
+      animation: textflicker 0.01s infinite alternate;
       animation-duration: 0.01s;
       animation-name: textflicker;
       animation-iteration-count: infinite;
@@ -30,9 +30,10 @@
     .window {
       display: flex;
       flex-direction: column;
-      height: 100%;
+      height: 100vh;
       width: 100%;
       background: #000;
+      overflow: hidden;
     }
 
     .title-bar {
@@ -55,6 +56,11 @@
       transform: translateX(-50%);
     }
 
+    .window-controls {
+      display: flex;
+      gap: 8px;
+    }
+
     .circle {
       width: 12px;
       height: 12px;
@@ -63,12 +69,8 @@
     }
 
     .close { background-color: #ff5f56; }
-    .minimize { background-color: #ffbd2e;
-      margin-left: -1460px;
-    }
-    .maximize { background-color: #33ff33;
-      position: relative;
-      right: 1460px;}
+    .minimize { background-color: #ffbd2e;}
+    .maximize { background-color: #33ff33;}
 
     .terminal {
       flex: 1;
@@ -76,12 +78,18 @@
       color: white;
       padding: 10px;
       white-space: pre-wrap;
+      box-sizing: border-box;
     }
 
     .input-line {
       padding: 10px;
       background-color: #000;
       color: white;
+      border-top: 1px solid #333;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      font-family: 'Menlo', monospace;
+      font-size: 1em;
     }
 
     .cursor {
@@ -99,7 +107,7 @@
     }
 
     input {
-      position: absolute;
+      position: fixed;
       opacity: 0;
       pointer-events: none;
     }
@@ -109,26 +117,28 @@
     font-weight: 400;
     src: url(./fonts/NotoSansDisplay-Regular.ttf);
   }
-
-  
+ 
 
   a {
     color: white;
   }
-
+  
   @media screen and (min-width: 1200px) {
-    body {
-        margin-left: 20rem;
-        margin-right: 20rem;
-    }
+  body {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
   }
+}
 
-  @media screen and (min-width: 600px) {
-      body {
-          margin-left: 5em;
-          margin-right: 5em;
-      }
+@media screen and (min-width: 600px) {
+  body {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 90%;
   }
+}
+
   
   @keyframes textflicker {
     from {
@@ -144,9 +154,11 @@
 <body onclick="focusInput()">
   <div class="window" id="terminalWindow">
     <div class="title-bar">
-      <div class="circle close" onclick="openYouTube()"></div>
-      <div class="circle minimize"></div>
-      <div class="circle maximize"></div>
+      <div class="window-controls">
+          <div class="circle close" onclick="openYouTube()"></div>
+          <div class="circle minimize"></div>
+          <div class="circle maximize"></div>
+      </div>
       <div class="title">TermoGame</div>
     </div>
     <div class="terminal" id="terminal">
