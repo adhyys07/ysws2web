@@ -179,17 +179,6 @@ Enter the command 'hey' to view other commands.
       terminal.innerHTML += "\n";
     }
 
-    function processGame(inputValue) {
-      if (gameStep === 1) {
-        terminal.innerHTML += inputValue === 'b' ? "✅ Correct!\n" : "❌ Wrong. The answer was 'b'.\n";
-        terminal.innerHTML += "Q2: What is this styled like?\n(a) Calculator\n(b) Terminal\n(c) TV\n";
-        gameStep = 2;
-      } else if (gameStep === 2) {
-        terminal.innerHTML += inputValue === 'b' ? "✅ You're right!\n" : "❌ Nope. It's a terminal.\n";
-        terminal.innerHTML += "🎉 Tour complete. Type 'help' for more.\n";
-        gameMode = false;
-      }
-    }
 
     input.addEventListener('input', () => {
       typed.textContent = input.value;
@@ -229,29 +218,29 @@ Enter the command 'hey' to view other commands.
         else if (value === 'reward') {
           terminal.innerHTML += "";
           }
-           else if (value === 'guide -n') {
-          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\n";
+        else if (value === 'guide -n') {
+          window.open("redirects/guide_n.html", "_blank");
           }
         else if (value === 'req -n') {
-          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          window.open("redirects/req_n.html", "_blank");
           }
         else if (value === 'projects -n') {
-          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          window.open("redirects/projects_n.html", "_blank");
           }
         else if (value === 'faqs -n') {
-          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          window.open("redirects/faq_n.html", "_blank");
           }
         else if (value === 'club-meet -n') {
-          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          window.open("redirects/club-meet_n.html", "_blank");
           }
         else if (value === 'submit -n') {
-          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          window.open("redirects/submit_n.html", "_blank");
           }
         else if (value === 'help -n') {
-          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          window.open("redirects/help_n.html", "_blank");
           }
         else if (value === 'reward -n') {
-          terminal.innerHTML += "";
+          window.open("redirects/guide_n.html", "_blank");
           }
          else if (value === 'clear') {
           terminal.innerHTML = '';
