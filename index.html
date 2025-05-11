@@ -95,8 +95,8 @@
   <div class="window" id="terminalWindow">
     <div class="title-bar">
       <div class="circle close" onclick="openYouTube()"></div>
-      <div class="circle minimize"></div>
-      <div class="circle maximize"></div>
+      <div class="circle minimize" onclick="closeFullscreen()"></div>
+      <div class="circle maximize" onclick="openFullscreen()"></div>
       <div class="title">TermoGame</div>
     </div>
     <div class="terminal" id="terminal">
@@ -117,6 +117,17 @@ Enter the command 'hey' to view other commands.
 
     let gameMode = false;
     let gameStep = 0;
+
+    function openFullscreen() {
+      const elem = document.documentElement; // You can also use a specific element
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { // Safari
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { // IE11
+        elem.msRequestFullscreen();
+      }
+    }
 
     function focusInput() {
       input.focus();
@@ -147,6 +158,15 @@ Enter the command 'hey' to view other commands.
       }
     }
 
+    function closeFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { // Safari
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { // IE11
+        document.msExitFullscreen();
+      }
+    }
     function hey(on) {
       alert("You clicked the close button!");
     }
@@ -180,6 +200,7 @@ Enter the command 'hey' to view other commands.
       window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
     }
 
+    
     focusInput();
   </script>
 </body>
