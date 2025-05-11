@@ -14,6 +14,17 @@
       background-color: #1e1e1e;
       height: 100%;
       font-family: 'Courier New', monospace;
+      padding: 1em;
+      font-family: Noto Sans Display;
+      color: #eee;
+      font-size: 1em;
+      line-height: 1;
+      text-shadow: 0.06rem 0 0.06rem #ea36af, -0.125rem 0 0.06rem #75fa69;
+      letter-spacing: 0.125em;
+      animation-duration: 0.01s;
+      animation-name: textflicker;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
     }
 
     .window {
@@ -74,11 +85,14 @@
     }
 
     .cursor {
-      display: inline-block;
-      width: 10px;
-      background: white;
-      animation: blink 1s step-start 0s infinite;
-    }
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background: white;
+  vertical-align: bottom;
+  animation: blink 1s step-start infinite;
+}
+
 
     @keyframes blink {
       50% { background: transparent; }
@@ -89,14 +103,50 @@
       opacity: 0;
       pointer-events: none;
     }
+    @font-face {
+    font-family: 'Noto Sans Display';
+    font-style: normal;
+    font-weight: 400;
+    src: url(./fonts/NotoSansDisplay-Regular.ttf);
+  }
+
+  
+
+  a {
+    color: white;
+  }
+
+  @media screen and (min-width: 1200px) {
+    body {
+        margin-left: 20rem;
+        margin-right: 20rem;
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+      body {
+          margin-left: 5em;
+          margin-right: 5em;
+      }
+  }
+  
+  @keyframes textflicker {
+    from {
+      text-shadow: 1px 0 0 #ea36af, -2px 0 0 #75fa69;
+    }
+    to {
+      text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
+    }
+  }
+    
   </style>
 </head>
 <body onclick="focusInput()">
   <div class="window" id="terminalWindow">
     <div class="title-bar">
       <div class="circle close" onclick="openYouTube()"></div>
-      <div class="circle minimize" onclick="closeFullscreen()"></div>
-      <div class="circle maximize" onclick="openFullscreen()"></div>
+      <div class="circle minimize"></div>
+      <div class="circle maximize"></div>
       <div class="title">TermoGame</div>
     </div>
     <div class="terminal" id="terminal">
@@ -106,7 +156,7 @@ Enter the command 'hey' to view other commands.
 1) hey (To see the available commands)
 
     </div>
-    <div class="input-line">$ <span id="typed"></span><span class="cursor"></span></div>
+    <div class="input-line">$<span id="typed"></span><span class="cursor"></span></div>
     <input type="text" id="hiddenInput" autofocus>
   </div>
 
@@ -117,17 +167,6 @@ Enter the command 'hey' to view other commands.
 
     let gameMode = false;
     let gameStep = 0;
-
-    function openFullscreen() {
-      const elem = document.documentElement; // You can also use a specific element
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) { // Safari
-        elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) { // IE11
-        elem.msRequestFullscreen();
-      }
-    }
 
     function focusInput() {
       input.focus();
@@ -158,15 +197,6 @@ Enter the command 'hey' to view other commands.
       }
     }
 
-    function closeFullscreen() {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) { // Safari
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { // IE11
-        document.msExitFullscreen();
-      }
-    }
     function hey(on) {
       alert("You clicked the close button!");
     }
@@ -200,8 +230,10 @@ Enter the command 'hey' to view other commands.
       window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
     }
 
-    
     focusInput();
   </script>
 </body>
 </html>
+
+/* recommit  
+*/
