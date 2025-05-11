@@ -175,7 +175,7 @@ Enter the command 'hey' to view other commands.
 
     function startGame() {
       terminal.innerHTML += "\n";
-      terminal.innerHTML += "1) guide  (For a quick guide)\n2) req (Requirements to participate)\n3) projects (To see the example projects)\n4) reward (To see the reward)\n5) faqs (Frequently Asked Questions)\n6) club-meet (To run a club meeting)\n7) Submit (Submit your project)\n8) help\n\nIf you want to open any of the above commands in a new tab, add -n after the command\nEg: guide -n\n";
+      terminal.innerHTML += "1) guide  (For a quick guide)\n2) req (Requirements to participate)\n3) projects (To see the example projects)\n4) reward (To see the reward)\n5) faqs (Frequently Asked Questions)\n6) club-meet (To run a club meeting)\n7) submit (Submit your project)\n8) help\n\nIf you want to open any of the above commands in a new tab, add -n after the command\nEg: guide -n\n";
       terminal.innerHTML += "\n";
     }
 
@@ -204,7 +204,56 @@ Enter the command 'hey' to view other commands.
           processGame(value);
         } else if (value === 'hey') {
           startGame();
-        } else if (value === 'clear') {
+        }
+        else if (value === 'guide') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'req') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'projects') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'faqs') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'club-meet') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'submit') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'help') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'reward') {
+          terminal.innerHTML += "";
+          }
+           else if (value === 'guide -n') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\nGuide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'req -n') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'projects -n') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'faqs -n') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'club-meet -n') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'submit -n') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'help -n') {
+          terminal.innerHTML += "Guide: This is a simple terminal game. Type 'play' to start.\n";
+          }
+        else if (value === 'reward -n') {
+          terminal.innerHTML += "";
+          }
+         else if (value === 'clear') {
           terminal.innerHTML = '';
         } else {
           terminal.innerHTML += (commands[value] || `'${value}' is not a recognized command.`) + '\n';
