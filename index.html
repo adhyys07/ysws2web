@@ -5,33 +5,31 @@
   <meta charset="UTF-8">
   <title>TermoGame</title>
   <style>
-    *{
-      font-family: 'Menlo', monospace;
+    * {
+      box-sizing: border-box;
+      font-family: 'Menlo', 'Courier New', monospace;
     }
+
     html, body {
       margin: 0;
       padding: 0;
       background-color: #1e1e1e;
       height: 100%;
-      font-family: 'Courier New', monospace;
-      padding: 1em;
-      font-family: Noto Sans Display;
+      width: 100%;
       color: #eee;
       font-size: 1em;
       line-height: 1;
       text-shadow: 0.06rem 0 0.06rem #ea36af, -0.125rem 0 0.06rem #75fa69;
       letter-spacing: 0.125em;
-      animation-duration: 0.01s;
-      animation-name: textflicker;
-      animation-iteration-count: infinite;
-      animation-direction: alternate;
+      animation: textflicker 0.01s infinite alternate;
+      overflow: hidden;
     }
 
     .window {
       display: flex;
       flex-direction: column;
-      height: 100%;
-      width: 100%;
+      height: 100vh;
+      width: 100vw;
       background: #000;
     }
 
@@ -39,20 +37,14 @@
       background: #2b2b2b;
       height: 30px;
       display: flex;
-      justify-content: space-between; /* space out the title and buttons */
       align-items: center;
       padding: 0 10px;
       position: relative;
     }
 
-    .title {
-      color: #fff;
-      font-weight: bold;
-      font-size: 14px;
-      margin: 0;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+    .circles {
+      display: flex;
+      gap: 8px;
     }
 
     .circle {
@@ -63,12 +55,17 @@
     }
 
     .close { background-color: #ff5f56; }
-    .minimize { background-color: #ffbd2e;
-      margin-left: -1460px;
+    .minimize { background-color: #ffbd2e; }
+    .maximize { background-color: #33ff33; }
+
+    .title {
+      color: #fff;
+      font-weight: bold;
+      font-size: 14px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
-    .maximize { background-color: #33ff33;
-      position: relative;
-      right: 1460px;}
 
     .terminal {
       flex: 1;
@@ -85,17 +82,25 @@
     }
 
     .cursor {
-  display: inline-block;
-  width: 8px;
-  height: 1em;
-  background: white;
-  vertical-align: bottom;
-  animation: blink 1s step-start infinite;
-}
-
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: white;
+      vertical-align: bottom;
+      animation: blink 1s step-start infinite;
+    }
 
     @keyframes blink {
       50% { background: transparent; }
+    }
+
+    @keyframes textflicker {
+      from {
+        text-shadow: 1px 0 0 #ea36af, -2px 0 0 #75fa69;
+      }
+      to {
+        text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
+      }
     }
 
     input {
@@ -103,50 +108,20 @@
       opacity: 0;
       pointer-events: none;
     }
-    @font-face {
-    font-family: 'Noto Sans Display';
-    font-style: normal;
-    font-weight: 400;
-    src: url(./fonts/NotoSansDisplay-Regular.ttf);
-  }
 
-  
-
-  a {
-    color: white;
-  }
-
-  @media screen and (min-width: 1200px) {
-    body {
-        margin-left: 20rem;
-        margin-right: 20rem;
+    a {
+      color: white;
     }
-  }
-
-  @media screen and (min-width: 600px) {
-      body {
-          margin-left: 5em;
-          margin-right: 5em;
-      }
-  }
-  
-  @keyframes textflicker {
-    from {
-      text-shadow: 1px 0 0 #ea36af, -2px 0 0 #75fa69;
-    }
-    to {
-      text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
-    }
-  }
-    
   </style>
 </head>
 <body onclick="focusInput()">
   <div class="window" id="terminalWindow">
     <div class="title-bar">
-      <div class="circle close" onclick="openYouTube()"></div>
-      <div class="circle minimize"></div>
-      <div class="circle maximize"></div>
+      <div class="circles">
+        <div class="circle close" onclick="openYouTube()"></div>
+        <div class="circle minimize" onclick="closeFullscreen()"></div>
+        <div class="circle maximize" onclick="openFullscreen()"></div>
+      </div>
       <div class="title">TermoGame</div>
     </div>
     <div class="terminal" id="terminal">
@@ -157,7 +132,8 @@ Enter the command 'hey' to view other commands.
 
     </div>
     <div class="input-line">$<span id="typed"></span><span class="cursor"></span></div>
-    <input type="text" id="hiddenInput" autofocus>
+    <input type="text" id="hiddenInput" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
   </div>
 
   <script>
@@ -171,6 +147,25 @@ Enter the command 'hey' to view other commands.
     function focusInput() {
       input.focus();
     }
+    function openFullscreen() {
+      const elem = document.documentElement; // You can also use a specific element
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { // Safari
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { // IE11
+        elem.msRequestFullscreen();
+      }
+    }
+     function closeFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { // Safari
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { // IE11
+        document.msExitFullscreen();
+      }
+    }
 
     const commands = {
       help: "Available commands:\n- help\n- about\n- clear\n- play",
@@ -182,7 +177,6 @@ Enter the command 'hey' to view other commands.
       terminal.innerHTML += "\n";
       terminal.innerHTML += "1) guide  (For a quick guide)\n2) req (Requirements to participate)\n3) projects (To see the example projects)\n4) reward (To see the reward)\n5) faqs (Frequently Asked Questions)\n6) club-meet (To run a club meeting)\n7) Submit (Submit your project)\n8) help";
       terminal.innerHTML += "\n";
-      
     }
 
     function processGame(inputValue) {
@@ -195,10 +189,6 @@ Enter the command 'hey' to view other commands.
         terminal.innerHTML += "🎉 Tour complete. Type 'help' for more.\n";
         gameMode = false;
       }
-    }
-
-    function hey(on) {
-      alert("You clicked the close button!");
     }
 
     input.addEventListener('input', () => {
@@ -234,6 +224,3 @@ Enter the command 'hey' to view other commands.
   </script>
 </body>
 </html>
-
-/* recommit  
-*/
