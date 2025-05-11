@@ -131,7 +131,7 @@ Enter the command 'hey' to view other commands.
 1) hey (To see the available commands)
 
     </div>
-    <div class="input-line">$<span id="typed"></span><span class="cursor"></span></div>
+    <div class="input-line">player@hackclub ~ %  <span id="typed"></span><span class="cursor"></span></div>
     <input type="text" id="hiddenInput" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 
   </div>
@@ -198,7 +198,7 @@ Enter the command 'hey' to view other commands.
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         const value = input.value.trim().toLowerCase();
-        terminal.innerHTML += `\n$ ${value}\n`;
+        terminal.innerHTML += `\nplayer@hackclub ~ % ${value}\n`;
 
         if (gameMode) {
           processGame(value);
