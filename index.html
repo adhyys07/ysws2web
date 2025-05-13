@@ -149,11 +149,14 @@
     }
 
     .input-line {
-      background-color: #000;
+       background-color: #000;
       color: white;
-      padding: 10px;
       display: flex;
       align-items: center;
+      padding: 0;
+      margin: 0;
+      font-family: 'Menlo', monospace;
+      margin-top: 22px;
     }
 
     .cursor {
@@ -192,6 +195,20 @@
       background: #000000;
       z-index: 2;
     }
+    #logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+  #terminalContainer {
+  height: 100vh;
+  overflow-y: auto;
+  position: relative;
+}
+.terminal-output {
+  margin-bottom: 12px;
+}
   </style>
 </head>
 <body onclick="focusInput()">
@@ -206,6 +223,7 @@
     </div>
 
     <div class="content" id="terminalContainer">
+      <div id="logo">
       <pre class="ascii-art">
         hhhhhhhhhhhh     
     hhhhhhhhhhhhhhhhhhh  
@@ -222,13 +240,13 @@ hhhhhhhh   hhh   hhhhhhhh
  hhhhhhhhhhhhhhhhhhhhhhh 
   hhhhhhhhhhhhhhhhhhhhh  
      hhhhhhhhhhhhhhh          
-
+        </div>
       </pre>
       <div class="terminal" id="terminal">Welcome to TermoGame! Type 'hey' to view commands.</div>
     </div>
 
     <div class="input-container">
-      <div class="input-line">player@hackclub ~ %&nbsp;<span id="typed"></span><span class="cursor"></span></div>
+    
     </div>
 
     <input type="text" id="hiddenInput" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -236,119 +254,156 @@ hhhhhhhh   hhh   hhhhhhhh
   </div>
 
   <script>
-    const terminal = document.getElementById('terminal');
-    const typed = document.getElementById('typed');
-    const input = document.getElementById('hiddenInput');
-    const typeSound = document.getElementById('typeSound');
-    const terminalContainer = document.getElementById('terminalContainer');
+  const terminal = document.getElementById('terminal');
+  const terminalContainer = document.getElementById('terminalContainer');
+  const typeSound = document.getElementById('typeSound');
 
-    let commandHistory = [];
-    let historyIndex = -1;
+  let commandHistory = [];
+  let historyIndex = -1;
+  const availableCommands = [
+    'hey', 'guide', 'req', 'projects', 'reward', 'faqs', 'club-meet', 'submit', 'help', 'clear',
+    'guide -n', 'req -n', 'projects -n', 'reward -n', 'faqs -n', 'club-meet -n', 'submit -n', 'help -n'
+  ];
 
-    const availableCommands = [
-      'hey', 'guide', 'req', 'projects', 'reward', 'faqs', 'club-meet', 'submit', 'help', 'clear',
-      'guide -n', 'req -n', 'projects -n', 'reward -n', 'faqs -n', 'club-meet -n', 'submit -n', 'help -n'
-    ];
+  let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  let buffer = null;
 
-    let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    let buffer = null;
+  fetch("https://www.soundjay.com/button/beep-07.wav")
+    .then(response => response.arrayBuffer())
+    .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+    .then(decoded => { buffer = decoded; });
 
-    fetch("https://www.soundjay.com/button/beep-07.wav")
-      .then(response => response.arrayBuffer())
-      .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-      .then(decoded => { buffer = decoded; });
+  function playTypeSound() {
+    if (!buffer) return;
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioContext.destination);
+    source.start(0);
+  }
 
-    function playTypeSound() {
-      if (!buffer) return;
-      const source = audioContext.createBufferSource();
-      source.buffer = buffer;
-      source.connect(audioContext.destination);
-      source.start(0);
-    }
+  function focusInput(inputElem) {
+    inputElem.focus();
+  }
 
-    function focusInput() {
-      input.focus();
-    }
+ function typeOutput(text, delay = 10, container) {
+  container.innerText += text;
+  terminalContainer.scrollTop = terminalContainer.scrollHeight;
+}
 
-    function typeOutput(text, delay = 10) {
-      let i = 0;
-      function typeChar() {
-        if (i < text.length) {
-          terminal.innerHTML += text[i];
-          terminalContainer.scrollTop = terminalContainer.scrollHeight;
-          if (!/\s/.test(text[i])) playTypeSound();
-          i++;
-          setTimeout(typeChar, delay);
-        }
-      }
-      typeChar();
-    }
+  function startGame(outputElem) {
+    typeOutput(
+      "\n1) guide (For a quick guide)\n2) req (Requirements to participate)\n3) projects (To see the example projects)\n4) reward (To see the reward)\n5) faqs (Frequently Asked Questions)\n6) club-meet (To run a club meeting)\n7) submit (Submit your project)\n8) help\n\nUse '-n' after any command to open in new tab (e.g. guide -n)\n",
+      10,
+      outputElem
+    );
+  }
 
-    function startGame() {
-      typeOutput("\n1) guide (For a quick guide)\n2) req (Requirements to participate)\n3) projects (To see the example projects)\n4) reward (To see the reward)\n5) faqs (Frequently Asked Questions)\n6) club-meet (To run a club meeting)\n7) submit (Submit your project)\n8) help\n\nUse '-n' after any command to open in new tab (e.g. guide -n)\n");
-    }
+  function createNewInput() {
+    const line = document.createElement("div");
+    line.classList.add("input-line");
 
-    input.addEventListener('input', () => {
-      typed.textContent = input.value;
+    const spanTyped = document.createElement("span");
+    spanTyped.classList.add("typed");
+
+    const cursor = document.createElement("span");
+    cursor.classList.add("cursor");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.classList.add("cmd-input");
+    input.autocomplete = "off";
+    input.autocorrect = "off";
+    input.autocapitalize = "off";
+    input.spellcheck = false;
+    input.style.opacity = 0;
+    input.style.position = "absolute";
+    document.body.appendChild(input);
+
+    line.innerHTML =`player@hackclub ~ %&nbsp;`;
+    line.appendChild(spanTyped);
+    line.appendChild(cursor);
+    terminal.appendChild(line);
+
+    input.addEventListener("input", () => {
+      spanTyped.innerHTML = input.value.replace(/ /g, "&nbsp;");
     });
 
-    input.addEventListener('keydown', e => {
-      if (e.key === 'ArrowUp') {
+    input.addEventListener("keydown", e => {
+      if (e.key === "ArrowUp") {
         if (commandHistory.length > 0 && historyIndex > 0) {
           historyIndex--;
           input.value = commandHistory[historyIndex];
-          typed.textContent = input.value;
+          spanTyped.innerHTML = input.value.replace(/ /g, "&nbsp;");
         }
-      } else if (e.key === 'ArrowDown') {
+      } else if (e.key === "ArrowDown") {
         if (commandHistory.length > 0 && historyIndex < commandHistory.length - 1) {
           historyIndex++;
           input.value = commandHistory[historyIndex];
-          typed.textContent = input.value;
+          spanTyped.innerHTML = input.value.replace(/ /g, "&nbsp;");
         } else {
-          input.value = '';
-          typed.textContent = '';
+          input.value = "";
+          spanTyped.innerHTML = "";
         }
-      } else if (e.key === 'Enter') {
+      } else if (e.key === "Enter") {
         const value = input.value.trim().toLowerCase();
-        terminal.innerHTML += `\nplayer@hackclub ~ % ${value}\n`;
         commandHistory.push(value);
         historyIndex = commandHistory.length;
 
+        input.remove();
+        cursor.remove();
+
+        const output = document.createElement("div");
+        output.classList.add("terminal-output");
+        terminal.appendChild(output);
+
         if (value === 'hey') {
-          startGame();
+          startGame(output);
         } else if (availableCommands.includes(value)) {
           if (value.endsWith('-n')) {
             const page = value.split(' ')[0];
             window.open(`redirects/${page}_n.html`, '_blank');
           } else if (value === 'clear') {
             terminal.innerHTML = '';
+            createNewInput();
+            return;
           } else {
-            typeOutput("Guide: This is a simple terminal game. Type 'play' to start.\n");
+            typeOutput("Guide: This is a simple terminal game. Type 'play' to start.\n", 10, output);
           }
         } else {
-          typeOutput(`'${value}' is not a recognized command.\n`);
+          typeOutput(`'${value}' is not a recognized command.\n`, 10, output);
         }
 
-        input.value = '';
-        typed.textContent = '';
-        terminalContainer.scrollTop = terminalContainer.scrollHeight;
+        setTimeout(() => {
+          createNewInput();
+        }, 50);
       }
     });
 
-    function openFullscreen() {
-      const elem = document.documentElement;
-      if (elem.requestFullscreen) elem.requestFullscreen();
-    }
+    focusInput(input);
+  }
 
-    function closeFullscreen() {
-      if (document.exitFullscreen) document.exitFullscreen();
-    }
+  createNewInput();
 
-    function openYouTube() {
-      window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-    }
+  function openFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) elem.requestFullscreen();
+  }
 
-    focusInput();
-  </script>
+  function closeFullscreen() {
+    if (document.exitFullscreen) document.exitFullscreen();
+  }
+
+  function openYouTube() {
+    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+  }
+
+  terminalContainer.addEventListener("click", () => {
+    const inputs = document.querySelectorAll(".cmd-input");
+    if (inputs.length) {
+      inputs[inputs.length - 1].focus();
+    }
+  });
+</script>
+
 </body>
 </html>
