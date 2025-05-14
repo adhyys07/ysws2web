@@ -11,18 +11,25 @@
       font-family: 'Menlo', 'Courier New', monospace;
     }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      height: 100%;
-      width: 100%;
-      color: #fff;
-      overflow: hidden;
-      display: flex; /* Ensure the body takes full viewport */
-      justify-content: center; /* Center content horizontally */
-      position: relative;
-    }
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* Transparent overlay over the video */
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+/* Apply synthwave glow to all text */
+body, .prompt, .typed-text, .welcome-msg, .terminal, .input-line, #outputArea {
+  color: #ffffff;
+  text-shadow: 0.06rem 0 0.06rem #ea36af, -0.125rem 0 0.06rem #75fa69;
+  font-family: 'Menlo', monospace;
+}
+
 
     /* Video background */
     #background-video {
@@ -115,18 +122,32 @@
       align-self: flex-start;
     }
 
-    .ascii-art {
-      white-space: pre;
-      font-size: 12px;
-      color: #ffffff;
-      text-shadow: 0.06rem 0 0.06rem #fafafa;
-      font-family: 'Menlo', monospace;
-      pointer-events: none;
-      line-height: 1.1;
-      margin: 0;
-      text-align: right;
-      max-width: 40%;
-    }
+.ascii-art {
+  white-space: pre;
+  font-size: 12px;
+  color: #00ffff; /* Cyan stands out against pink */
+  font-family: 'Menlo', monospace;
+  pointer-events: none;
+  line-height: 1.1;
+  margin: 0;
+  text-align: right;
+  max-width: 40%;
+
+  text-shadow:
+    0 0 1px #00ffff,
+    0 0 3px #00ffff,
+    0 0 6px #00ffff,
+    0 0 10px #00ffff,
+    0 0 15px #00ffff;
+
+  animation: asciiGlow 1.5s infinite alternate;
+}
+
+@keyframes asciiGlow {
+  0% { opacity: 0.85; text-shadow: 0 0 1px #00ffff, 0 0 6px #00ffff; }
+  100% { opacity: 1; text-shadow: 0 0 2px #00ffff, 0 0 10px #00ffff; }
+}
+
 
     .terminal {
       white-space: pre-wrap;
