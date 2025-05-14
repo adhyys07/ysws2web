@@ -11,21 +11,19 @@
       font-family: 'Menlo', 'Courier New', monospace;
     }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* Transparent overlay over the video */
-  height: 100%;
-  width: 100%;
-  color: #00ffff;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      height: 100%;
+      width: 100%;
+      color: #00ffff;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
 
-
-    /* Video background */
     #background-video {
       position: absolute;
       top: 0;
@@ -33,7 +31,7 @@ body {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: 0; /* Ensure the video is behind the content */
+      z-index: 0;
     }
 
     .window {
@@ -41,9 +39,9 @@ body {
       flex-direction: column;
       height: 100vh;
       width: 100vw;
-      background: rgba(0, 0, 0, 0.5); /* Slight dark overlay */
+      background: rgba(0, 0, 0, 0.5);
       margin: 0;
-      position: relative; /* Ensure window content is above the video */
+      position: relative;
     }
 
     .title-bar {
@@ -88,7 +86,7 @@ body {
       font-size: 14px;
       line-height: 1.4;
       position: relative;
-      height: calc(100vh - 30px); /* Fill remaining height */
+      height: calc(100vh - 30px);
       width: 100%;
       margin: 0;
       padding-bottom: 50px;
@@ -116,67 +114,49 @@ body {
       align-self: flex-start;
     }
 
-.ascii-art {
-  white-space: pre;
-  font-size: 12px;
-  color: #00ffff; /* Cyan stands out against pink */
-  font-family: 'Menlo', monospace;
-  pointer-events: none;
-  line-height: 1.1;
-  margin: 0;
-  text-align: right;
-  max-width: 40%;
+    .ascii-art {
+      white-space: pre;
+      font-size: 12px;
+      color: #00ffff;
+      font-family: 'Menlo', monospace;
+      pointer-events: none;
+      line-height: 1.1;
+      margin: 0;
+      text-align: right;
+      max-width: 40%;
+      text-shadow:
+        0 0 1px #00ffff,
+        0 0 3px #00ffff,
+        0 0 6px #00ffff,
+        0 0 10px #00ffff,
+        0 0 15px #00ffff;
+      animation: asciiGlow 1.5s infinite alternate;
+    }
 
-  text-shadow:
-    0 0 1px #00ffff,
-    0 0 3px #00ffff,
-    0 0 6px #00ffff,
-    0 0 10px #00ffff,
-    0 0 15px #00ffff;
-
-  animation: asciiGlow 1.5s infinite alternate;
-}
-
-@keyframes asciiGlow {
-  0% { opacity: 0.85; text-shadow: 0 0 1px #00ffff, 0 0 6px #00ffff; }
-  100% { opacity: 1; text-shadow: 0 0 2px #00ffff, 0 0 10px #00ffff; }
-}
-
+    @keyframes asciiGlow {
+      0% { opacity: 0.85; text-shadow: 0 0 1px #00ffff, 0 0 6px #00ffff; }
+      100% { opacity: 1; text-shadow: 0 0 2px #00ffff, 0 0 10px #00ffff; }
+    }
 
     .terminal {
       white-space: pre-wrap;
-    }
-
-    .input-container {
-      background: #000;
-      padding: 8px 10px;
-      border-top: 1px solid #333;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      height: 40px;
-      flex-shrink: 0;
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
     }
 
     .input-line {
       display: flex;
       align-items: center;
       white-space: pre;
-      width: 100%;
     }
 
     .prompt, .typed-text {
-      color: #00fff;
+      color: #00ffff;
     }
 
     .cursor {
       display: inline-block;
       width: 8px;
       height: 1em;
-      background: white;
+      background: #00ffff;
       animation: blink 1s step-start infinite;
       margin-left: 2px;
     }
@@ -191,7 +171,6 @@ body {
       pointer-events: none;
     }
 
-    /* Minimal adjustments for styling */
     @font-face {
       font-family: 'Noto Sans Display';
       font-style: normal;
@@ -227,7 +206,6 @@ body {
 
 <body onclick="focusInput()">
 
-  <!-- Video Background -->
   <video id="background-video" autoplay loop muted>
     <source src="synvid.mp4" type="video/mp4">
   </video>
@@ -247,7 +225,13 @@ body {
         <div class="header-row">
           <div class="left-section">
             <div class="welcome-msg">Welcome to TermoGame! Type 'hey' to get started.</div>
-            <div id="outputArea"></div>
+            <div id="outputArea">
+              <div class="input-line" id="liveInputLine">
+                <span class="prompt">player@hackclub ~ % </span>
+                <span class="typed-text" id="typedText"></span>
+                <span class="cursor" id="cursor"></span>
+              </div>
+            </div>
           </div>
           <pre class="ascii-art">
 ====++++++++    
@@ -266,15 +250,6 @@ body {
       </div>
     </div>
 
-    <!-- Input Area -->
-    <div class="input-container">
-      <div class="input-line" id="inputLine">
-        <span class="prompt">player@hackclub ~ % </span>
-        <span class="typed-text" id="typedText"></span>
-        <span class="cursor" id="cursor"></span>
-      </div>
-    </div>
-
     <input type="text" id="hiddenInput" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     <audio id="typeSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
   </div>
@@ -285,6 +260,7 @@ body {
     const input = document.getElementById("hiddenInput");
     const typedText = document.getElementById("typedText");
     const typeSound = document.getElementById("typeSound");
+    const liveInputLine = document.getElementById("liveInputLine");
 
     const availableCommands = [
       'hey', 'guide', 'req', 'projects', 'reward', 'faqs', 'club-meet', 'submit', 'help', 'clear',
@@ -326,21 +302,48 @@ body {
         }
       } else if (e.key === "Enter") {
         const value = input.value.trim();
+        if (!value) return;
+
         commandHistory.push(value);
         historyIndex = commandHistory.length;
 
-        echoInput(value);
+        const commandLine = liveInputLine.cloneNode(true);
+        commandLine.querySelector("#typedText").textContent = value;
+        commandLine.querySelector("#cursor").remove();
+        outputArea.insertBefore(commandLine, liveInputLine);
+
         processCommand(value.toLowerCase());
+
         input.value = '';
         typedText.textContent = '';
         terminalContainer.scrollTop = terminalContainer.scrollHeight;
       }
     });
 
-    function echoInput(value) {
-      const echo = document.createElement("div");
-      echo.innerHTML = `<span class="prompt">player@hackclub ~ % </span><span>${value}</span>`;
-      outputArea.appendChild(echo);
+    function printLine(text, delay = 1) {
+      const div = document.createElement("div");
+      outputArea.insertBefore(div, liveInputLine);
+      let index = 0;
+      function typeChar() {
+        if (index < text.length) {
+          div.textContent += text.charAt(index);
+          index++;
+          setTimeout(typeChar, delay);
+        }
+      }
+      typeChar();
+    }
+
+    function printLines(lines) {
+      let i = 0;
+      function nextLine() {
+        if (i < lines.length) {
+          printLine(lines[i]);
+          i++;
+          setTimeout(nextLine, lines[i - 1].length * 20 + 10);
+        }
+      }
+      nextLine();
     }
 
     function processCommand(cmd) {
@@ -359,6 +362,7 @@ body {
         ]);
       } else if (cmd === "clear") {
         outputArea.innerHTML = "";
+        outputArea.appendChild(liveInputLine);
       } else if (availableCommands.includes(cmd)) {
         if (cmd.endsWith("-n")) {
           const page = cmd.split(" ")[0];
@@ -369,37 +373,6 @@ body {
       } else {
         printLine(`'${cmd}' is not a recognized command.`);
       }
-    }
-
-    function printLine(text, delay = 5) {
-      const div = document.createElement("div");
-      outputArea.appendChild(div);
-
-      let index = 0;
-
-      function typeChar() {
-        if (index < text.length) {
-          div.textContent += text.charAt(index);
-          index++;
-          setTimeout(typeChar, delay);
-        }
-      }
-
-      typeChar();
-    }
-
-    function printLines(lines) {
-      let i = 0;
-
-      function nextLine() {
-        if (i < lines.length) {
-          printLine(lines[i]);
-          i++;
-          setTimeout(nextLine, lines[i - 1].length * 20 + 50); // Wait for line to finish + small pause
-        }
-      }
-
-      nextLine();
     }
 
     function openFullscreen() {
